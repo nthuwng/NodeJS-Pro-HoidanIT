@@ -1,0 +1,19 @@
+{
+  "name": "nodejs-pro-hoidanit",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nthuwng/NodeJS-Pro-HoidanIT.git"
+  },
+  "author": "hungDev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nthuwng/NodeJS-Pro-HoidanIT/issues"
+  },
+  "homepage": "https://github.com/nthuwng/NodeJS-Pro-HoidanIT#readme",
+  "description": ""
+}
