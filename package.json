@@ -15,5 +15,8 @@
     "url": "https://github.com/nthuwng/NodeJS-Pro-HoidanIT/issues"
   },
   "homepage": "https://github.com/nthuwng/NodeJS-Pro-HoidanIT#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "5.0.1"
+  }
 }
