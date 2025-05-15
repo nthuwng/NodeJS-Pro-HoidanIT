@@ -4,7 +4,7 @@ import { getAllUsers, handleCreateUser } from "../services/user.services";
 const getHomePage = async (req: Request, res: Response) => {
   const users = await getAllUsers();
   console.log("check list user: ", users);
-  return res.render("home", { name: users });
+  return res.render("home", { users: users });
 };
 
 const getCreateUserPage = (req: Request, res: Response) => {

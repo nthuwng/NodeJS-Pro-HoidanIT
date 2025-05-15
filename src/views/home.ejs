@@ -16,7 +16,8 @@
 <body>
     <div style="margin: 25px;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1>List User: <%=name %> </h1>
+            <h1>List User:
+            </h1>
             <!-- <img src="/images/hình nền.jpg" alt=""> -->
             <div>
                 <a href="/create-user" class="btn btn-warning">create a new User</a>
@@ -27,22 +28,33 @@
             <table class="table table-hover table-bordered">
                 <thead>
                     <th>Id</th>
-                    <th>Company</th>
-                    <th>Contact</th>
-                    <th>Country</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Alfreds Futterkiste</td>
-                        <td>Maria Anders</td>
-                        <td>Germany</td>
-                        <td>Germany</td>
-                        <td>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
+                    <% users.forEach( function (user) { %>
+                        <tr>
+                            <td>
+                                <%= user.id %>
+                            </td>
+                            <td>
+                                <%= user.name %>
+                            </td>
+                            <td>
+                                <%= user.email %>
+                            </td>
+                            <td>
+                                <%= user.address %>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger">Delete</button>
+                            </td>
 
-                    </tr>
+                        </tr>
+                        <% }) %>
+
                 </tbody>
 
             </table>
