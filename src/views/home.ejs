@@ -14,9 +14,40 @@
 </head>
 
 <body>
-    <h1>hello ejs HungDev hihi</h1>
-    <!-- <img src="/images/hình nền.jpg" alt=""> -->
-    <a href="/create-user" class="btn btn-warning">create a new User</a>
+    <div style="margin: 25px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>List User: <%=name %> </h1>
+            <!-- <img src="/images/hình nền.jpg" alt=""> -->
+            <div>
+                <a href="/create-user" class="btn btn-warning">create a new User</a>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <th>Id</th>
+                    <th>Company</th>
+                    <th>Contact</th>
+                    <th>Country</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Alfreds Futterkiste</td>
+                        <td>Maria Anders</td>
+                        <td>Germany</td>
+                        <td>Germany</td>
+                        <td>
+                            <button class="btn btn-danger">Delete</button>
+                        </td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
 
 </body>
 
