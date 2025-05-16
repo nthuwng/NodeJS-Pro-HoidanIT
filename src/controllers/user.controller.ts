@@ -3,6 +3,8 @@ import {
   getAllUsers,
   handleCreateUser,
   handleDeleteUser,
+  handleViewUser,
+  handleUpdateUser,
 } from "services/user.services";
 
 const getHomePage = async (req: Request, res: Response) => {
@@ -31,4 +33,25 @@ const postDeleteUser = async (req: Request, res: Response) => {
   return res.redirect("/");
 };
 
-export { getHomePage, getCreateUserPage, postCreateUser, postDeleteUser };
+const postUpdateUser = async (req: Request, res: Response) => {
+  const { id, fullName, email, address } = req.body;
+  await handleUpdateUser(id, fullName, email, address);
+
+  return res.redirect("/");
+};
+
+const getViewUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const users = await handleViewUser(id);
+
+  return res.render("view-user", { id: id, users: users });
+};
+
+export {
+  getHomePage,
+  getCreateUserPage,
+  postCreateUser,
+  postDeleteUser,
+  getViewUser,
+  postUpdateUser,
+};
