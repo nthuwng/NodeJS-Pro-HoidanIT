@@ -18,7 +18,6 @@ const getCreateUserPage = (req: Request, res: Response) => {
 
 const postCreateUser = async (req: Request, res: Response) => {
   const { fullName, email, address } = req.body;
-
   //handle create user
   await handleCreateUser(fullName, email, address);
 
@@ -43,7 +42,6 @@ const postUpdateUser = async (req: Request, res: Response) => {
 const getViewUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const users = await handleViewUser(id);
-
   return res.render("view-user", { id: id, users: users });
 };
 
