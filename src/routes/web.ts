@@ -5,8 +5,9 @@ import {
   postCreateUser,
   postDeleteUser,
   getViewUser,
-  postUpdateUser
+  postUpdateUser,
 } from "../controllers/user.controller";
+import { getDashBoardPage } from "controllers/admin/dashboard.controller";
 
 const router = express.Router();
 
@@ -20,6 +21,8 @@ const webRoutes = (app: Express) => {
   router.get("/handle-view-user/:id", getViewUser);
   router.post("/handle-update-user", postUpdateUser);
 
+  //admin routes
+  router.get("/admin", getDashBoardPage);
   app.use("/", router);
 };
 
