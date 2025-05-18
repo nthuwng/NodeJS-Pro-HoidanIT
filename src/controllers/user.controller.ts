@@ -5,6 +5,7 @@ import {
   handleDeleteUser,
   handleViewUser,
   handleUpdateUser,
+  getAllRoles,
 } from "services/user.services";
 
 const getHomePage = async (req: Request, res: Response) => {
@@ -12,14 +13,16 @@ const getHomePage = async (req: Request, res: Response) => {
   return res.render("home", { users: users });
 };
 
-const getCreateUserPage = (req: Request, res: Response) => {
-  return res.render("create-user.ejs");
+const getCreateUserPage = async (req: Request, res: Response) => {
+  const roles = await getAllRoles();
+  return res.render("admin/user/create.ejs", { roles: roles });
 };
 
 const postCreateUser = async (req: Request, res: Response) => {
-  const { fullName, email, address } = req.body;
+  const { fullName, username, phone, role, address } = req.body;
+  console.log("req.body", req.body);
   //handle create user
-  await handleCreateUser(fullName, email, address);
+  // await handleCreateUser(fullName, email, address);
 
   return res.redirect("/");
 };

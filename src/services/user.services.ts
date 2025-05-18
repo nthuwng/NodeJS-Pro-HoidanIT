@@ -57,10 +57,16 @@ const getAllUsers = async () => {
   return user;
 };
 
+const getAllRoles = async () => {
+  const roles = await prisma.role.findMany();
+  return roles;
+};
+
 export {
   handleCreateUser,
   getAllUsers,
   handleDeleteUser,
   handleViewUser,
   handleUpdateUser,
+  getAllRoles,
 };
