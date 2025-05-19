@@ -44,15 +44,19 @@ const handleDeleteUser = async (id: string) => {
 const handleUpdateUser = async (
   id: string,
   fullName: string,
-  email: string,
-  address: string
+  phone: string,
+  role: string,
+  address: string,
+  avatar: string
 ) => {
   const updateUser = await prisma.user.update({
     where: { id: +id },
     data: {
       fullName: fullName,
-      username: email,
+      phone: phone,
+      roleId: +role,
       address: address,
+      ...(avatar !== undefined && { avatar: avatar }),
     },
   });
   return updateUser;

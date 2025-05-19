@@ -22,10 +22,6 @@ const router = express.Router();
 const webRoutes = (app: Express) => {
   router.get("/", getHomePage);
 
-  router.post("/handle-delete-user/:id", postDeleteUser);
-  router.get("/handle-view-user/:id", getViewUser);
-  router.post("/handle-update-user", postUpdateUser);
-
   //admin routes
   router.get("/admin", getDashBoardPage);
   router.get("/admin/user", getUserPage);
@@ -35,9 +31,15 @@ const webRoutes = (app: Express) => {
     fileUploadMiddleware("avatar"),
     postCreateUser
   );
-
+  router.post("/admin/delete-user/:id", postDeleteUser);
+  router.post(
+    "/admin/update-user",
+    fileUploadMiddleware("avatar"),
+    postUpdateUser
+  );
   router.get("/admin/order", getOrderPage);
   router.get("/admin/product", getProductPage);
+  router.get("/admin/view-user/:id", getViewUser);
 
   app.use("/", router);
 };
