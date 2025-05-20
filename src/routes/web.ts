@@ -11,9 +11,9 @@ import {
   getDashBoardPage,
   getUserPage,
   getOrderPage,
-  getProductPage,
 } from "controllers/admin/dashboard.controller";
 import fileUploadMiddleware from "src/middleware/multer";
+import { getProductPage } from "controllers/client/product.controller";
 
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -21,6 +21,7 @@ const router = express.Router();
 
 const webRoutes = (app: Express) => {
   router.get("/", getHomePage);
+  router.get("/product/:id", getProductPage);
 
   //admin routes
   router.get("/admin", getDashBoardPage);
