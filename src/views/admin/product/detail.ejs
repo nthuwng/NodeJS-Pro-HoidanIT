@@ -108,10 +108,13 @@
                                             <input name="image" class="form-control" type="file" id="avatarFile"
                                                 accept=".png, .jpg, .jpeg">
                                         </div>
-                                        <img style="max-height: 250px; display: none;" alt="avatar preview"
-                                            id="avatarPreview" />
-
-
+                                            <% if (products.image) { %>
+                                                <img style="max-height: 250px; display: block;" alt="avatar preview"
+                                                    id="avatarPreview" src="/images/product/<%= products.image%>" />
+                                                <% } else { %>
+                                                    <img style="max-height: 250px; display: none;" alt="avatar preview"
+                                                        id="avatarPreview" />
+                                                    <% } %>
 
                                         <div class="mb-3 mt-2">
                                             <button type="submit" class="btn btn-warning">Submit</button>
