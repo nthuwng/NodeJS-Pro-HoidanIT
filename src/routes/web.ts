@@ -22,6 +22,7 @@ import {
   getViewProduct,
   postUpdateProduct,
 } from "controllers/admin/product.controller";
+import { getLoginPage,getRegisterPage,postRegisterPage } from "controllers/client/auth.controller";
 
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -30,6 +31,10 @@ const router = express.Router();
 const webRoutes = (app: Express) => {
   router.get("/", getHomePage);
   router.get("/product/:id", getProductPage);
+  router.get("/login", getLoginPage);
+  router.get("/register", getRegisterPage);
+  router.post("/register", postRegisterPage);
+
 
   //admin routes
   //user routes
