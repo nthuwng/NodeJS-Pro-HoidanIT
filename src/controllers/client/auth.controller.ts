@@ -3,7 +3,9 @@ import { registerNewUser } from "services/client/auth.services";
 import { RegisterSchema } from "src/validation/register.schema";
 
 const getLoginPage = (req: Request, res: Response) => {
-  return res.render("client/auth/login.ejs");
+  const { session } = req as any;
+  const messages = session?.messages ?? [];
+  return res.render("client/auth/login.ejs", { messages });
 };
 
 const getRegisterPage = (req: Request, res: Response) => {

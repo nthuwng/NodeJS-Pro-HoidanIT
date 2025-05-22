@@ -4,13 +4,16 @@ import {
   getAllUsers,
   handleCreateUser,
   handleDeleteUser,
-  handleViewUser,
   handleUpdateUser,
   getAllRoles,
+  getUserById,
 } from "services/user.services";
 
 const getHomePage = async (req: Request, res: Response) => {
   const products = await getProduct();
+  const users = req.user;
+
+  console.log("user", users);
 
   return res.render("client/home/show.ejs", { products });
 };
@@ -54,7 +57,7 @@ const getViewUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const roles = await getAllRoles();
 
-  const users = await handleViewUser(id);
+  const users = await getUserById(id);
   return res.render("admin/user/detail.ejs", {
     id: id,
     users: users,

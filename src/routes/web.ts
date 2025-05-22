@@ -22,7 +22,12 @@ import {
   getViewProduct,
   postUpdateProduct,
 } from "controllers/admin/product.controller";
-import { getLoginPage,getRegisterPage,postRegisterPage } from "controllers/client/auth.controller";
+import {
+  getLoginPage,
+  getRegisterPage,
+  postRegisterPage,
+} from "controllers/client/auth.controller";
+import passport from "passport";
 
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -32,9 +37,17 @@ const webRoutes = (app: Express) => {
   router.get("/", getHomePage);
   router.get("/product/:id", getProductPage);
   router.get("/login", getLoginPage);
+  router.post(
+    "/login",
+    passport.authenticate("local", {
+      successRedirect: "/",
+      failureRedirect: "/login",
+      failureMessage: true,
+    })
+  );
+
   router.get("/register", getRegisterPage);
   router.post("/register", postRegisterPage);
-
 
   //admin routes
   //user routes

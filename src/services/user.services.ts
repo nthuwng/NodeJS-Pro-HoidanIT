@@ -8,6 +8,10 @@ const hashPassword = async (password: string) => {
   return hashedPassword;
 };
 
+const comparePassword = async (password: string, hashedPassword: string) => {
+  return await bcrypt.compare(password, hashedPassword);
+};
+
 const handleCreateUser = async (
   fullName: string,
   email: string,
@@ -62,7 +66,7 @@ const handleUpdateUser = async (
   return updateUser;
 };
 
-const handleViewUser = async (id: string) => {
+const getUserById = async (id: string) => {
   const user = await prisma.user.findUnique({
     where: {
       id: +id,
@@ -85,8 +89,9 @@ export {
   handleCreateUser,
   getAllUsers,
   handleDeleteUser,
-  handleViewUser,
+  getUserById,
   handleUpdateUser,
   getAllRoles,
   hashPassword,
+  comparePassword,
 };
