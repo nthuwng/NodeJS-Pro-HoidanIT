@@ -1,3 +1,5 @@
+/// <reference path="./types/index.d.ts" />
+
 // const express = require("express");
 import express from "express";
 import "dotenv/config";
@@ -45,11 +47,23 @@ app.use(passport.initialize());
 app.use(passport.authenticate("session"));
 configPassPortLocal();
 
+//config global
+app.use((req, res, next) => {
+  res.locals.user = req.user || null; // Pass user object to all views
+  next();
+});
+
 //config routes
 webRoutes(app);
 
 //seeding data
 initDatabase();
+
+//config error handling
+app.use((req, res) => {
+  res.render("status/404.ejs");
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

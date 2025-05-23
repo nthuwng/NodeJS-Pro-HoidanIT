@@ -25,9 +25,12 @@ import {
 import {
   getLoginPage,
   getRegisterPage,
+  getSuccessRedirectPage,
+  postLogout,
   postRegisterPage,
 } from "controllers/client/auth.controller";
 import passport from "passport";
+import { isAdmin, isLogin } from "src/middleware/auth";
 
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
@@ -36,16 +39,17 @@ const router = express.Router();
 const webRoutes = (app: Express) => {
   router.get("/", getHomePage);
   router.get("/product/:id", getProductPage);
+  router.get("/success-redirect", getSuccessRedirectPage);
   router.get("/login", getLoginPage);
   router.post(
     "/login",
     passport.authenticate("local", {
-      successRedirect: "/",
+      successRedirect: "/success-redirect",
       failureRedirect: "/login",
       failureMessage: true,
     })
   );
-
+  router.post("/logout", postLogout);
   router.get("/register", getRegisterPage);
   router.post("/register", postRegisterPage);
 
@@ -86,7 +90,7 @@ const webRoutes = (app: Express) => {
   //order routes
   router.get("/admin/order", getAdminOrderPage);
 
-  app.use("/", router);
+  app.use("/", isAdmin, router);
 };
 
 export default webRoutes;

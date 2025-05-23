@@ -1,7 +1,8 @@
 import { prisma } from "config/client";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { comparePassword, getUserById } from "services/user.services";
+import { getUserWithRolesById } from "services/client/auth.services";
+import { comparePassword } from "services/user.services";
 
 const configPassPortLocal = () => {
   passport.use(
@@ -36,7 +37,7 @@ const configPassPortLocal = () => {
           message: `Username/password invalid`,
         });
       }
-      return callback(null, user);
+      return callback(null, user as any);
     })
   );
 
@@ -47,7 +48,7 @@ const configPassPortLocal = () => {
   passport.deserializeUser(async function (user: any, callback) {
     const { id, username } = user;
     //qurrey db
-    const userInDB = await getUserById(id);
+    const userInDB = await getUserWithRolesById(id);
     return callback(null, { ...userInDB });
   });
 };
