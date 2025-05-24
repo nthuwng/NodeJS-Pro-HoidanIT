@@ -1,7 +1,10 @@
 import { prisma } from "config/client";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { getUserWithRolesById } from "services/client/auth.services";
+import {
+  getUserSumCart,
+  getUserWithRolesById,
+} from "services/client/auth.services";
 import { comparePassword } from "services/user.services";
 
 const configPassPortLocal = () => {
@@ -48,8 +51,11 @@ const configPassPortLocal = () => {
   passport.deserializeUser(async function (user: any, callback) {
     const { id, username } = user;
     //qurrey db
-    const userInDB:any = await getUserWithRolesById(id);
-    return callback(null, { ...userInDB });
+    const userInDB: any = await getUserWithRolesById(id);
+
+    const sumCart = await getUserSumCart(id);
+
+    return callback(null, { ...userInDB, sumCart: sumCart });
   });
 };
 
