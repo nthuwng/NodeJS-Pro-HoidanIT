@@ -48,7 +48,7 @@ const configPassPortLocal = () => {
   passport.deserializeUser(async function (user: any, callback) {
     const { id, username } = user;
     //qurrey db
-    const userInDB = await getUserWithRolesById(id);
+    const userInDB:any = await getUserWithRolesById(id);
     return callback(null, { ...userInDB });
   });
 };
