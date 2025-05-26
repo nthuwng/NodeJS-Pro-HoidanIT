@@ -5,12 +5,14 @@ import {
   getProductById,
   getProductInCart,
   handleDeleteProductInCart,
+  handlePlaceOrder,
   updateCartDetailBeforeCheckOut,
 } from "services/client/item.services";
 
 const getProductPage = async (req: Request, res: Response) => {
   const { id } = req.params;
   const product = await getProductById(+id);
+
   return res.render("client/product/detail.ejs", { product });
 };
 
@@ -84,11 +86,34 @@ const postHandleCartToCheckOut = async (req: Request, res: Response) => {
   }
   const currentCartDetail: { id: string; quantity: string }[] =
     req.body?.cartDetails ?? [];
-  
-    console.log("currentCartDetail", currentCartDetail);
+
+  console.log("currentCartDetail", currentCartDetail);
 
   await updateCartDetailBeforeCheckOut(currentCartDetail);
   return res.redirect("/checkout");
+};
+
+const postPlaceOder = async (req: Request, res: Response) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.redirect("/login");
+  }
+
+  const {receiverName, receiverAddress, receiverPhone,totalPrice} = req.body;
+
+  await handlePlaceOrder(user.id,receiverName, receiverAddress, receiverPhone,totalPrice)
+
+  return res.redirect("/thanks");
+};
+
+const getThanksPage = async (req: Request, res: Response) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.redirect("/login");
+  }
+  return res.render("client/product/thanks.ejs");
 };
 export {
   getProductPage,
@@ -97,4 +122,6 @@ export {
   postDeleteProductInCart,
   getCheckOutPage,
   postHandleCartToCheckOut,
+  postPlaceOder,
+  getThanksPage
 };

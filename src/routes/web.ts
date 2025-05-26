@@ -12,16 +12,25 @@ import {
   getAdminUserPage,
   getAdminOrderPage,
   getAdminProductPage,
+  getAdminViewOder,
 } from "controllers/admin/dashboard.controller";
 import fileUploadMiddleware from "src/middleware/multer";
-import { getCartPage, getCheckOutPage, getProductPage, postAddProductToCart, postDeleteProductInCart, postHandleCartToCheckOut } from "controllers/client/product.controller";
+import {
+  getCartPage,
+  getCheckOutPage,
+  getProductPage,
+  postAddProductToCart,
+  postDeleteProductInCart,
+  postHandleCartToCheckOut,
+  postPlaceOder,
+  getThanksPage,
+} from "controllers/client/product.controller";
 import {
   getAdminCreateProductPage,
   postAdminCreateProduct,
   postDeleteProduct,
   getViewProduct,
   postUpdateProduct,
-
 } from "controllers/admin/product.controller";
 import {
   getLoginPage,
@@ -53,12 +62,13 @@ const webRoutes = (app: Express) => {
   router.post("/logout", postLogout);
   router.get("/register", getRegisterPage);
   router.post("/register", postRegisterPage);
-  router.post("/add-product-to-cart/:id",postAddProductToCart);
+  router.post("/add-product-to-cart/:id", postAddProductToCart);
   router.get("/cart", getCartPage);
   router.post("/delete-product-in-cart/:id", postDeleteProductInCart);
   router.post("/handle-cart-to-checkout", postHandleCartToCheckOut);
   router.get("/checkout", getCheckOutPage);
-
+  router.post("/place-order", postPlaceOder);
+  router.get("/thanks", getThanksPage);
 
   //admin routes
   //user routes
@@ -96,6 +106,8 @@ const webRoutes = (app: Express) => {
 
   //order routes
   router.get("/admin/order", getAdminOrderPage);
+  router.get("/admin/view-Order/:id", getAdminViewOder);
+
 
   app.use("/", isAdmin, router);
 };

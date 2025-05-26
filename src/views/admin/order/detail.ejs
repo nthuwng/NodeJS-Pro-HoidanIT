@@ -29,7 +29,10 @@
             <h1 class="mt-4">Manager Order</h1>
             <ol class="breadcrumb mb-4">
               <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
-              <li class="breadcrumb-item active">Order</li>
+              <li class="breadcrumb-item">
+                <a href="/admin/order">Order</a>
+              </li>
+              <li class="breadcrumb-item active">View Detail</li>
             </ol>
             <div>
               <div
@@ -39,45 +42,54 @@
                   align-items: center;
                 "
               >
-                <h5>Table Order:</h5>
+                <h5>Order detail with id = <%= id %></h5>
               </div>
               <hr />
               <table class="table table-hover table-bordered">
                 <thead>
-                  <th>Id</th>
-                  <th>User</th>
-                  <th>Total Price</th>
-                  <th>Status</th>
-                  <th>Payment Method</th>
-                  <th>Payment Status</th>
-                  <th>Action</th>
+                  <th>Sản phẩm</th>
+                  <th>Tên</th>
+                  <th>Giá cả</th>
+                  <th>Số lượng</th>
+                  <th>Thành tiền</th>
                 </thead>
                 <tbody>
-                  <% Orders.forEach( function (Order) { %>
+                  <% OrderDetails.forEach( function (OrderDetail) { %>
                   <tr>
-                    <td><%= Order.id %></td>
-                    <td><%= Order.user.username %></td>
+                    <th scope="row">
+                      <div class="d-flex align-items-center">
+                        <img class="img-fluid me-5 rounded-circle"
+                          src="/images/product/<%= OrderDetail.product.image %>"
+                          alt="Product Image"
+                          style="width: 80px; height: 80px"
+                        />
+                      </div>
+                    </th>
+                    <td>
+                      <p class="mb-o mt-4">
+                        <a
+                          href="/product/<%= OrderDetail.product.id %>"
+                          target="_blank"
+                          ><%= OrderDetail.product.name %></a
+                        >
+                      </p>
+                    </td>
                     <td>
                       <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
-                      currency: 'VND' }).format(Order.totalPrice) %>
+                      currency: 'VND' }).format(OrderDetail.price) %>
                     </td>
-                    <td><%= Order.status %></td>
-                    <td><%= Order.paymentMethod %></td>
-                    <td><%= Order.paymentStatus %></td>
+                    <td><%= OrderDetail.quantity %></td>
                     <td>
-                      <div style="display: flex; gap: 10px">
-                        <form
-                          action="/admin/view-Order/<%= Order.id %>"
-                          method="get"
-                        >
-                          <button class="btn btn-warning">View</button>
-                        </form>
-                      </div>
+                      <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
+                      currency: 'VND' }).format(OrderDetail.price *
+                      OrderDetail.quantity) %>
                     </td>
                   </tr>
                   <% }) %>
                 </tbody>
               </table>
+
+              <a href="/admin/order" class="btn btn-success">Back</a>
             </div>
           </div>
         </main>
