@@ -1,11 +1,12 @@
+import { CartDetail } from "./../../../node_modules/.prisma/client/index.d";
 import { Request, Response } from "express";
 import {
   addProductToCart,
   getProductById,
   getProductInCart,
   handleDeleteProductInCart,
+  updateCartDetailBeforeCheckOut,
 } from "services/client/item.services";
-import { map } from "zod";
 
 const getProductPage = async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -74,10 +75,26 @@ const getCheckOutPage = async (req: Request, res: Response) => {
     return res.redirect("/login");
   }
 };
+
+const postHandleCartToCheckOut = async (req: Request, res: Response) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.redirect("/login");
+  }
+  const currentCartDetail: { id: string; quantity: string }[] =
+    req.body?.cartDetails ?? [];
+  
+    console.log("currentCartDetail", currentCartDetail);
+
+  await updateCartDetailBeforeCheckOut(currentCartDetail);
+  return res.redirect("/checkout");
+};
 export {
   getProductPage,
   postAddProductToCart,
   getCartPage,
   postDeleteProductInCart,
   getCheckOutPage,
+  postHandleCartToCheckOut,
 };
