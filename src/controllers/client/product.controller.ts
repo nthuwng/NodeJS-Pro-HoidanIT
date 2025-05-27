@@ -42,9 +42,11 @@ const getCartPage = async (req: Request, res: Response) => {
     ?.map((item) => item.price * item.quantity)
     .reduce((a, b) => a + b, 0);
 
+  const cartId = cartDetails.length ? cartDetails[0].cartId : 0;
   return res.render("client/product/cart.ejs", {
     cartDetails: cartDetails,
     totalPrice: totalPrice,
+    cartId: cartId,
   });
 };
 
@@ -85,12 +87,15 @@ const postHandleCartToCheckOut = async (req: Request, res: Response) => {
   if (!user) {
     return res.redirect("/login");
   }
+
+  const { cartId } = req.body;
+
   const currentCartDetail: { id: string; quantity: string }[] =
     req.body?.cartDetails ?? [];
 
   console.log("currentCartDetail", currentCartDetail);
 
-  await updateCartDetailBeforeCheckOut(currentCartDetail);
+  await updateCartDetailBeforeCheckOut(currentCartDetail, cartId);
   return res.redirect("/checkout");
 };
 
@@ -103,7 +108,7 @@ const postPlaceOder = async (req: Request, res: Response) => {
 
   const { receiverName, receiverAddress, receiverPhone, totalPrice } = req.body;
 
-  await handlePlaceOrder(
+  const message = await handlePlaceOrder(
     user.id,
     receiverName,
     receiverAddress,
@@ -111,6 +116,9 @@ const postPlaceOder = async (req: Request, res: Response) => {
     totalPrice
   );
 
+  if (message) {
+    return res.redirect("/checkout");
+  }
   return res.redirect("/thanks");
 };
 
@@ -131,10 +139,23 @@ const getOrdersHistoryPage = async (req: Request, res: Response) => {
   }
 
   const orders = await handleGetOrdersHistory(user.id);
-  console.log("orders", orders);
   return res.render("client/product/orders.history.ejs", {
     orders: orders,
   });
+};
+
+const postAddToCartFromDetailPage = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const { quantity } = req.body;
+  const user = req.user;
+
+  if (!user) {
+    return res.redirect("/login");
+  }
+
+  await addProductToCart(+quantity, +id, user);
+  return res.redirect(`/product/${id}`);
 };
 export {
   getProductPage,
@@ -146,4 +167,5 @@ export {
   postPlaceOder,
   getThanksPage,
   getOrdersHistoryPage,
+  postAddToCartFromDetailPage,
 };

@@ -25,6 +25,7 @@ import {
   postPlaceOder,
   getThanksPage,
   getOrdersHistoryPage,
+  postAddToCartFromDetailPage,
 } from "controllers/client/product.controller";
 import {
   getAdminCreateProductPage,
@@ -71,6 +72,8 @@ const webRoutes = (app: Express) => {
   router.post("/place-order", postPlaceOder);
   router.get("/thanks", getThanksPage);
   router.get("/order-history", getOrdersHistoryPage);
+  router.post("/add-to-cart-from-detail-page/:id", postAddToCartFromDetailPage);
+
 
 
   //admin routes

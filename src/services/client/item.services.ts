@@ -109,6 +109,13 @@ const handleDeleteProductInCart = async (
   userId: number,
   sumCart: number
 ) => {
+  const currentCartDetail = await prisma.cartDetail.findUnique({
+    where: {
+      id: +cartDetailId,
+    },
+  });
+  const quantity = currentCartDetail?.quantity;
+
   await prisma.cartDetail.delete({
     where: {
       id: +cartDetailId,
@@ -128,7 +135,7 @@ const handleDeleteProductInCart = async (
       },
       data: {
         sum: {
-          decrement: 1,
+          decrement: quantity,
         },
       },
     });
@@ -136,9 +143,13 @@ const handleDeleteProductInCart = async (
 };
 
 const updateCartDetailBeforeCheckOut = async (
-  data: { id: string; quantity: string }[]
+  data: { id: string; quantity: string }[],
+  cartId: string
 ) => {
+  let quantity = 0;
+
   for (let i = 0; i < data.length; i++) {
+    quantity += +data[i].quantity;
     await prisma.cartDetail.update({
       where: {
         id: +data[i].id,
@@ -148,6 +159,17 @@ const updateCartDetailBeforeCheckOut = async (
       },
     });
   }
+
+  await prisma.cart.update({
+    where: {
+      id: +cartId,
+    },
+    data: {
+      sum: {
+        set: quantity,
+      },
+    },
+  });
 };
 
 const handlePlaceOrder = async (
@@ -157,52 +179,90 @@ const handlePlaceOrder = async (
   receiverPhone: string,
   totalPrice: number
 ) => {
-  const cart = await prisma.cart.findUnique({
-    where: {
-      userId: +userId,
-    },
-    include: {
-      cartDetails: true,
-    },
-  });
-
-  if (cart) {
-    // create order
-    const dataOrderDetails =
-      cart?.cartDetails?.map((item) => ({
-        productId: item.productId,
-        quantity: item.quantity,
-        price: item.price,
-      })) ?? [];
-    await prisma.order.create({
-      data: {
-        receiverName,
-        receiverAddress,
-        receiverPhone,
-        paymentMethod: "COD",
-        paymentStatus: "PAYMENT_UNPAID",
-        status: "PENDING",
-        totalPrice: +totalPrice,
-        userId,
-        orderDetails: {
-          create: dataOrderDetails,
+  try {
+    await prisma.$transaction(async (tx) => {
+      const cart = await tx.cart.findUnique({
+        where: {
+          userId: +userId,
         },
-      },
-    });
+        include: {
+          cartDetails: true,
+        },
+      });
 
-    // delete cart
-    await prisma.cartDetail.deleteMany({
-      where: {
-        cartId: cart.id,
-      },
-    });
+      if (cart) {
+        // create order
+        const dataOrderDetails =
+          cart?.cartDetails?.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.price,
+          })) ?? [];
+        await tx.order.create({
+          data: {
+            receiverName,
+            receiverAddress,
+            receiverPhone,
+            paymentMethod: "COD",
+            paymentStatus: "PAYMENT_UNPAID",
+            status: "PENDING",
+            totalPrice: +totalPrice,
+            userId,
+            orderDetails: {
+              create: dataOrderDetails,
+            },
+          },
+        });
 
-    await prisma.cart.delete({
-      where: {
-        id: cart.id,
-      },
+        // delete cart
+        await tx.cartDetail.deleteMany({
+          where: {
+            cartId: cart.id,
+          },
+        });
+
+        await tx.cart.delete({
+          where: {
+            id: cart.id,
+          },
+        });
+      }
+
+      //check product
+      for (let i = 0; i < cart.cartDetails.length; i++) {
+        const productId = cart.cartDetails[i].productId;
+
+        const product = await tx.product.findUnique({
+          where: {
+            id: productId,
+          },
+        });
+        if (!product || product.quantity < cart.cartDetails[i].quantity) {
+          //update product quantity
+          throw new Error(
+            `Sản phẩm ${product?.name} không tồn tại hoặc số lượng không đủ`
+          );
+        }
+        await tx.product.update({
+          where: {
+            id: productId,
+          },
+          data: {
+            quantity: {
+              decrement: cart.cartDetails[i].quantity,
+            },
+            sold: {
+              increment: cart.cartDetails[i].quantity,
+            },
+          },
+        });
+      }
     });
+    return "";
+  } catch (error) {
+    return error.message;
   }
+  //create transaction
 };
 
 const handleGetOrdersHistory = async (userId: number) => {

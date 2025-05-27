@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { getDashBoardInfo } from "services/admin/dashboard.services";
 import {
   getAllOrders,
   getAllOrdersDetail,
@@ -7,7 +8,10 @@ import { getProductList } from "services/admin/product.services";
 import { getAllUsers } from "services/user.services";
 
 const getDashBoardPage = async (req: Request, res: Response) => {
-  return res.render("admin/dashboard/show.ejs");
+  const info = await getDashBoardInfo();
+  console.log(info);
+
+  return res.render("admin/dashboard/show.ejs", { info: info });
 };
 
 const getAdminUserPage = async (req: Request, res: Response) => {
@@ -36,6 +40,7 @@ const getAdminViewOder = async (req: Request, res: Response) => {
     id: id,
   });
 };
+
 export {
   getDashBoardPage,
   getAdminUserPage,
