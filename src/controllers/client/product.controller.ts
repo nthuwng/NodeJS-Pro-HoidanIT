@@ -5,6 +5,7 @@ import {
   getProductById,
   getProductInCart,
   handleDeleteProductInCart,
+  handleGetOrdersHistory,
   handlePlaceOrder,
   updateCartDetailBeforeCheckOut,
 } from "services/client/item.services";
@@ -100,9 +101,15 @@ const postPlaceOder = async (req: Request, res: Response) => {
     return res.redirect("/login");
   }
 
-  const {receiverName, receiverAddress, receiverPhone,totalPrice} = req.body;
+  const { receiverName, receiverAddress, receiverPhone, totalPrice } = req.body;
 
-  await handlePlaceOrder(user.id,receiverName, receiverAddress, receiverPhone,totalPrice)
+  await handlePlaceOrder(
+    user.id,
+    receiverName,
+    receiverAddress,
+    receiverPhone,
+    totalPrice
+  );
 
   return res.redirect("/thanks");
 };
@@ -115,6 +122,20 @@ const getThanksPage = async (req: Request, res: Response) => {
   }
   return res.render("client/product/thanks.ejs");
 };
+
+const getOrdersHistoryPage = async (req: Request, res: Response) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.redirect("/login");
+  }
+
+  const orders = await handleGetOrdersHistory(user.id);
+  console.log("orders", orders);
+  return res.render("client/product/orders.history.ejs", {
+    orders: orders,
+  });
+};
 export {
   getProductPage,
   postAddProductToCart,
@@ -123,5 +144,6 @@ export {
   getCheckOutPage,
   postHandleCartToCheckOut,
   postPlaceOder,
-  getThanksPage
+  getThanksPage,
+  getOrdersHistoryPage,
 };
