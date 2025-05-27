@@ -75,8 +75,14 @@ const getUserById = async (id: string) => {
   return user;
 };
 
-const getAllUsers = async () => {
-  const user = await prisma.user.findMany();
+const getAllUsers = async (currentPage: number) => {
+  const pageSize = 2;
+  const skip = (currentPage - 1) * pageSize;
+
+  const user = await prisma.user.findMany({
+    skip: skip,
+    take: pageSize,
+  });
   return user;
 };
 
