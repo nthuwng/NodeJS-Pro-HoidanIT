@@ -6,6 +6,7 @@ import {
   postDeleteUser,
   getViewUser,
   postUpdateUser,
+  getProductsFilterPage,
 } from "../controllers/user.controller";
 import {
   getDashBoardPage,
@@ -50,6 +51,9 @@ const router = express.Router();
 
 const webRoutes = (app: Express) => {
   router.get("/", getHomePage);
+  router.get("/products", getProductsFilterPage);
+
+
   router.get("/product/:id", getProductPage);
   router.get("/success-redirect", getSuccessRedirectPage);
   router.get("/login", getLoginPage);
