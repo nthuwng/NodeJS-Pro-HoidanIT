@@ -84,9 +84,7 @@
               <tr>
                 <td colspan="6">Không có đơn hàng nào được tạo</td>
               </tr>
-              <% } %> 
-              
-              <% orders.forEach( function (order, index) { %>
+              <% } %> <% orders.forEach( function (order, index) { %>
               <tr>
                 <td colspan="2">OrderID = <%=order.id %></td>
                 <td colspan="1">
@@ -135,9 +133,7 @@
                   </div>
                 </td>
                 <td>
-                  <p
-                    class="mb-0 mt-4"
-                  >
+                  <p class="mb-0 mt-4">
                     <%= new Intl.NumberFormat('vi-VN', { style: 'currency' ,
                     currency: 'VND' }).format(orderDetail.quantity *
                     orderDetail.price) %>
@@ -145,9 +141,7 @@
                 </td>
                 <td></td>
               </tr>
-              <% }) %>
-             <% }) %>
-
+              <% }) %> <% }) %>
             </tbody>
           </table>
         </div>
